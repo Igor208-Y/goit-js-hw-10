@@ -1,62 +1,53 @@
 import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.min.css"; 
+import "flatpickr/dist/flatpickr.min.css";
+import { refs, convertMs } from "./storage"; 
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
+flatpickr(refs.input, refs.options);
 
-const input = document.querySelector("#datetime-picker");
-const btn = document.querySelector("[data-start]");
-const daysEl = document.querySelector("[data-days]");
-const hoursEl = document.querySelector("[data-hours]");
-const minutesEl = document.querySelector("[data-minutes]");
-const secondsEl = document.querySelector("[data-seconds]");
+let countdownInterval;
 
-let countdown;
-let selectedDate;
+refs.btn.setAttribute("disabled", true);
 
-flatpickr(input, {
-    enableTime: true,
-    time_24hr: true,
-    defaultDate: new Date(),
-    minuteIncrement: 1,
-    onClose(selectedDates) {
-        selectedDate = selectedDates[0];
-        btn.disabled = selectedDate <= Date.now();
+refs.btn.addEventListener("click", () => {
+    const selectedDate = refs.options.userSelectedDate;
+
+    if (!selectedDate || selectedDate.getTime() <= Date.now()) {
+        refs.btn.setAttribute("disabled", true);
+        return;
     }
-});
 
-btn.addEventListener("click", () => {
-    btn.disabled = true;
-    input.disabled = true;
+    refs.btn.setAttribute("disabled", true);
+    refs.input.setAttribute("disabled", true);
+    refs.btn.style.pointerEvents = "none";
 
-    countdown = setInterval(() => {
-        const ms = selectedDate - new Date();
+    countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const ms = selectedDate - now;
+
         if (ms <= 0) {
-            clearInterval(countdown);
-            return resetTimer();
+            clearInterval(countdownInterval);
+            refs.days.textContent = "00";
+            refs.hours.textContent = "00";
+            refs.minutes.textContent = "00";
+            refs.seconds.textContent = "00";
+
+            refs.input.removeAttribute("disabled");
+            return;
         }
-        updateTimer(ms);
+
+        const { days, hours, minutes, seconds } = convertMs(ms);
+
+        refs.days.textContent = String(days).padStart(2, "0");
+        refs.hours.textContent = String(hours).padStart(2, "0");
+        refs.minutes.textContent = String(minutes).padStart(2, "0");
+        refs.seconds.textContent = String(seconds).padStart(2, "0");
     }, 1000);
 });
 
-function updateTimer(ms) {
-    const time = convertMs(ms);
-    daysEl.textContent = time.days.toString().padStart(2, "0");
-    hoursEl.textContent = time.hours.toString().padStart(2, "0");
-    minutesEl.textContent = time.minutes.toString().padStart(2, "0");
-    secondsEl.textContent = time.seconds.toString().padStart(2, "0");
-}
 
-function resetTimer() {
-    input.disabled = false;
-    [daysEl, hoursEl, minutesEl, secondsEl].forEach(el => el.textContent = "00");
-}
 
-function convertMs(ms) {
-    return {
-        days: Math.floor(ms / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((ms / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((ms / (1000 * 60)) % 60),
-        seconds: Math.floor((ms / 1000) % 60)
-    };
-}
+
+
+
