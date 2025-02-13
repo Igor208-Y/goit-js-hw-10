@@ -12,23 +12,26 @@
   <link rel="modulepreload" crossorigin href="/goit-js-hw-10/assets/vendor-A92OCY9B.js">
   <link rel="modulepreload" crossorigin href="/goit-js-hw-10/assets/storage-CKT-Hq3I.js">
   <link rel="stylesheet" crossorigin href="/goit-js-hw-10/assets/vendor-CUZofXIC.css">
-  <link rel="stylesheet" crossorigin href="/goit-js-hw-10/assets/styles-CD4_gsTi.css">
+  <link rel="stylesheet" crossorigin href="/goit-js-hw-10/assets/2-snackbar-68KiZFWY.css">
 </head>
 
 <body>
+
+<div class="container">
+  
   <form class="form">
-    <label>
+    <label class="delay-label">
       Delay (ms)
       <input type="number" name="delay" required />
     </label>
 
     <fieldset>
       <legend>State</legend>
-      <label>
+      <label class="radio-label">
         <input type="radio" name="state" value="fulfilled" required />
         Fulfilled
       </label>
-      <label>
+      <label class="radio-label">
         <input type="radio" name="state" value="rejected" required />
         Rejected
       </label>
@@ -36,6 +39,7 @@
 
     <button type="submit">Create notification</button>
   </form>
+</div>
 
 </body>
 
