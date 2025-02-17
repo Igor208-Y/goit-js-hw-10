@@ -1,6 +1,6 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-import { refs, convertMs } from "./storage"; 
+import { refs, convertMs } from "./storage";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
@@ -20,7 +20,6 @@ refs.btn.addEventListener("click", () => {
 
     refs.btn.setAttribute("disabled", true);
     refs.input.setAttribute("disabled", true);
-    refs.btn.style.pointerEvents = "none";
 
     countdownInterval = setInterval(() => {
         const now = new Date().getTime();
@@ -33,7 +32,10 @@ refs.btn.addEventListener("click", () => {
             refs.minutes.textContent = "00";
             refs.seconds.textContent = "00";
 
+            // Відновлення початкового стану
             refs.input.removeAttribute("disabled");
+            refs.btn.removeAttribute("disabled");
+            refs.btn.style.pointerEvents = "auto";
             return;
         }
 
@@ -45,6 +47,7 @@ refs.btn.addEventListener("click", () => {
         refs.seconds.textContent = String(seconds).padStart(2, "0");
     }, 1000);
 });
+
 
 
 
